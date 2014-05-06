@@ -5,6 +5,7 @@
     <script src="http://fb.me/react-0.10.0.js"></script>
     <script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
   </head>
   <body>
     <div id="content"></div>
@@ -14,14 +15,17 @@
        */
       // The above declaration must remain intact at the top of the script.
       // Your code here
+
+      var converter = new Showdown.converter();
       var Comment = React.createClass({
         render: function(){
+          var rawMarkup = converter.makeHtml(this.props.children.toString());
           return (
             <div className="Comment">
               <h2 className="commentAuthor">
                 {this.props.author}
               </h2>
-              {this.props.children}
+              <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
             </div>
           );
         }
@@ -35,6 +39,7 @@
               <Comment author="Jordan Walke">This is *another* comment</Comment>
               <Comment author="Simon K">Simons comment</Comment>
               <Comment author="Johny Doe">Hi! Johny Doe here</Comment>
+              <Comment author="Paula Adams">Hello everyone! :D</Comment>
             </div>
           );
         }
