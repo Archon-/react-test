@@ -11,7 +11,8 @@
         {author: "Jordan Walke2", text: "This is another _comment_"}
       ]; 
       */
-
+(function () {
+  "use strict";
       var converter = new Showdown.converter();
       var Comment = React.createClass({
         render: function(){
@@ -117,3 +118,4 @@
         <CommentBox url="comments.json" pollInterval={2000} />,
         document.getElementById('content')
       );
+}());
