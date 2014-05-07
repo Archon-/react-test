@@ -4,12 +4,15 @@
       // The above declaration must remain intact at the top of the script.
       // Your code here
 
+      /*
       var data = [
         {author: "Pete Hunt", text: "This is one comment"},
         {author: "Jordan Walke", text: "This is *another* comment"},
         {author: "Jordan Walke2", text: "This is another _comment_"}
       ]; 
-
+      */
+(function () {
+  "use strict";
       var converter = new Showdown.converter();
       var Comment = React.createClass({
         render: function(){
@@ -39,29 +42,80 @@
       });
 
       var CommentForm = React.createClass({
+        handleSubmit: function(){
+          var author = this.refs.author.getDOMNode().value.trim(),
+              text = this.refs.text.getDOMNode().value.trim();
+            if(!text || !author) {
+              return false;
+            }
+            this.props.onCommentSubmit({author: author, text: text});
+            this.refs.author.getDOMNode().value = '';
+            this.refs.text.getDOMNode().value = '';
+            return false;
+        },
         render: function(){
           return (
-            <div className="CommentForm">
-              CommentForm here.
-            </div>
+            <form className="commentForm" onSubmit={this.handleSubmit}>
+              <input type="text" placeholder="Your name" ref="author" />
+              <input type="text" placeholder="Write comment..." ref="text" />
+              <input type="submit" value="Post" />
+            </form>
           );
         }
       });
 
       var CommentBox = React.createClass({
+        loadCommentsFromServer: function(){
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function(data){
+              this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err){
+              console.error(this.props.url, status, err.toString());
+            }.bind(this)
+          });
+        },
+        handleCommentSubmit: function(comment){
+          //debugger;
+          var comments = this.state.data;
+          var newComments = comments.concat([comment]);
+          this.setState({data: newComments});
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: comment,
+            success: function(data){
+              this.setState({data: data});
+            }.bind(this)
+          });
+          //return false;
+        },
+        getInitialState: function() {
+          return {data: []};
+        },
+        componentWillMount: function(){
+          this.loadCommentsFromServer();
+          setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+        },
         render: function(){
           return (
               <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList data={this.props.data} />
+                <CommentList data={this.state.data} />
                 <p>&nbsp;</p>
-                <CommentForm />
+                <CommentForm
+                  onCommentSubmit={this.handleCommentSubmit}
+                />
               </div>
             );
         }
       });
 
       React.renderComponent(
-        <CommentBox data={data} />,
+        <CommentBox url="comments.json" pollInterval={2000} />,
         document.getElementById('content')
       );
+}());
