@@ -84,12 +84,17 @@ var ProductTable = React.createClass({
  */
 
 var SearchBar = React.createClass({
+
+    /**
+     * Handler for changes in inputs.
+     */
     handleChange: function(){
         this.props.onUserInput(
             this.refs.filterTextInput.getDOMNode().value,
             this.refs.inStockOnlyInput.getDOMNode().checked
         );
     },
+
     render: function() {
         return (
             <form onSubmit={this.handleSubmit}>
@@ -121,6 +126,10 @@ var SearchBar = React.createClass({
  */
 
 var FilterableProductTable = React.createClass({
+
+    /**
+     * Setup default filterText and inStockOnly
+     */
     getInitialState: function(){
         return {
             filterText: '',
@@ -128,6 +137,9 @@ var FilterableProductTable = React.createClass({
         }
     },
 
+    /**
+     * Handler for inputed text
+     */
     handleUserInput: function(filterText, inStockOnly){
         this.setState({
             filterText: filterText,
