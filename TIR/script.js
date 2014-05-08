@@ -1,10 +1,27 @@
 /** @jsx React.DOM */
 
+/**
+ *  @class ProductCategoryRow
+ *  @classdesc Contains the category row
+ *  @param {object}         props
+ *  @param {string}         props.category      Category name
+ */
+
 var ProductCategoryRow = React.createClass({
     render: function() {
         return (<tr><th colSpan="2">{this.props.category}</th></tr>);
     }
 });
+
+/**
+ *  @class ProductRow
+ *  @classdesc Contains data about product 
+ *  @param {object}         props
+ *  @param {object}         props.product           Product data
+ *  @param {string}         props.product.name      Product name
+ *  @param {string}         props.product.price     Product price
+ *  @param {boolean}        props.product.stocked   Product avaliability
+ */
 
 var ProductRow = React.createClass({
     render: function() {
@@ -21,6 +38,16 @@ var ProductRow = React.createClass({
         );
     }
 });
+
+/**
+ *  @class ProductTable
+ *  @classdesc  Component containt all table elements like category, products and search form
+ *  @param {object}         props
+ *  @param {object}         props.product           Product data
+ *  @param {string}         props.product.name      Product name
+ *  @param {string}         props.product.price     Product price
+ *  @param {boolean}        props.product.stocked   Product avaliability
+ */
 
 var ProductTable = React.createClass({
     render: function() {
@@ -49,6 +76,12 @@ var ProductTable = React.createClass({
     }
 });
 
+/**
+ *  @class SearchBar
+ *  @classdesc Search form
+ *  
+ */
+
 var SearchBar = React.createClass({
     render: function() {
         return (
@@ -62,6 +95,12 @@ var SearchBar = React.createClass({
         );
     }
 });
+
+/**
+ *  @class FilterableProductTable
+ *  @classdesc Filter products
+ *  
+ */
 
 var FilterableProductTable = React.createClass({
     render: function() {
@@ -82,7 +121,8 @@ var PRODUCTS = [
   {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
   {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
   {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'},
-  {category: 'Food', price: '$00.99', stocked: true, name: 'Milk'}
+  {category: 'Food', price: '$00.99', stocked: true, name: 'Milk'},
+  {category: 'Food', price: '$00.99', stocked: true, name: 'Butter'}
 ];
  
 React.renderComponent(<FilterableProductTable products={PRODUCTS} />, document.body);
